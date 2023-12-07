@@ -5,8 +5,6 @@ const {
     getQuestionsMoodHandler,
     postAnswersMoodHandler,
     getHistoryMoodHandler,
-    postSuggestionsIDHandler,
-    getSuggestionsHandler,
     postStoryHandler,
     getAllStoriesHandler,
     getRepliesHandler,
@@ -55,16 +53,6 @@ const routes = [
         method: 'POST',
         path: '/stories/{storyId}/replies',
         handler: postReplyHandler,
-    },
-    {
-        method: 'POST',
-        path: '/suggestions',
-        handler: getSuggestionsHandler,
-    },
-    {
-        method: 'POST',
-        path: '/suggestions/{id}/responses',
-        handler: postSuggestionsIDHandler,
     },
     {
         method: 'GET',

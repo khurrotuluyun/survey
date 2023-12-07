@@ -1,5 +1,6 @@
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
+const db = require('./db');
 
 
 const init = async () => {
@@ -16,6 +17,7 @@ const init = async () => {
     });
 
     server.route(routes);
+    server.decorate('request', 'knex', db);
 
     // Running server
     await server.start();
