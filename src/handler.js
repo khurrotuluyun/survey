@@ -1,6 +1,5 @@
 //////////////////// FITUR RATE MENTAL HEALTH ////////////////////////
-const questions = [
-];
+const questions = [];
 
 const answers = {};
 
@@ -97,36 +96,6 @@ const postReplyHandler = (request, h) => {
 };
 
 
-/////////////////////// FITUR SARAN MASALAH /////////////////////////
-
-// Handler function untuk user mengirimkan masalah/keluhan
-const getSuggestionsHandler = (request, h) => {
-    const newSuggestion = {
-        id: suggestions.length + 1,
-        user: request.payload.user,
-        issue: request.payload.issue,
-    };
-    suggestions.push(newSuggestion);
-    return h.response(newSuggestion).code(201);
-};
-
-// Handler function untuk bot mengirimkan saran untuk masalah user
-const postSuggestionsIDHandler = (request, h) => {
-    const suggestionId = parseInt(request.params.id);
-    const suggestion = suggestions.find((s) => s.id === suggestionId);
-    if (!suggestion) {
-        return h.response({ error: 'Suggestion not found' }).code(404);
-    }
-
-    const newBotResponse = {
-        suggestionId: suggestionId,
-        response: request.payload.response,
-    };
-    botResponses.push(newBotResponse);
-    return h.response(newBotResponse).code(201);
-};
-
-
 //////////////// FITUR DETEKSI SUASANA HATI ///////////////////////////
 
 // Handler function untuk route GET Question Mood 
@@ -157,8 +126,6 @@ const getHistoryMoodHandler = (request, h) => {
 module.exports = {
     getQuestionsHandler, postAnswersHandler, getRatingHandler, getQuestionsMoodHandler,
     postStoryHandler, getAllStoriesHandler, getRepliesHandler, postReplyHandler,
-    getSuggestionsHandler,
-    postSuggestionsIDHandler,
     postAnswersMoodHandler,
     getHistoryMoodHandler,
 };
