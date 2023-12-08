@@ -42,21 +42,6 @@ const routes = [
         path: '/stories/{storyId}/replies',
         handler: postReplyHandler,
     },
-    {
-        method: 'GET',
-        path: '/moods',
-        handler: getQuestionsMoodHandler,
-    },
-    {
-        method: 'POST',
-        path: '/moods',
-        handler: postAnswersMoodHandler,
-    },
-    {
-        method: 'GET',
-        path: '/moods/history',
-        handler: getHistoryMoodHandler,
-    },
 ];
 
 module.exports = routes;
