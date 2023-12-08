@@ -1,9 +1,6 @@
 const {
     getSurveyQuestionHandler,
     postSurveyAnswerHandler,
-    getQuestionsMoodHandler,
-    postAnswersMoodHandler,
-    getHistoryMoodHandler,
     postStoryHandler,
     getAllStoriesHandler,
     getRepliesHandler,
