@@ -1,7 +1,6 @@
 const {
-    getQuestionsHandler,
-    postAnswersHandler,
-    getRatingHandler,
+    getSurveyQuestionHandler,
+    postSurveyAnswerHandler,
     getQuestionsMoodHandler,
     postAnswersMoodHandler,
     getHistoryMoodHandler,
@@ -12,24 +11,16 @@ const {
 } = require('./handler')
 
 const routes = [
-    // Endpoint ini digunakan untuk mendapatkan daftar pertanyaan pilihan ganda yang akan ditanyakan kepada pengguna
     {
         method: 'GET',
-        path: '/rate/get-questions',
-        handler: getQuestionsHandler,
-    },
-    // Endpoint ini digunakan untuk menerima jawaban dari pengguna setelah menjawab semua pertanyaan.
-    {
+        path: '/survey/question',
+        handler: getSurveyQuestionHandler,
+      },
+      {
         method: 'POST',
-        path: '/rate/submit-answers',
-        handler: postAnswersHandler,
-    },
-    // Endpoint ini digunakan untuk memberikan rating kondisi mental health pengguna setelah menjawab pertanyaan.
-    {
-        method: 'GET',
-        path: '/rate/get-rating',
-        handler: getRatingHandler,
-    },
+        path: '/survey/answer',
+        handler: postSurveyAnswerHandler,
+      },
     // Mengirim Cerita/Thread
     {
         method: 'POST',

@@ -1,36 +1,31 @@
 //////////////////// FITUR RATE MENTAL HEALTH ////////////////////////
-const questions = [];
-
-const answers = {};
-
-// Handler function untuk mendapatkan pertanyaan
-const getQuestionsHandler = (request, h) => {
-    return { questions };
-};
-
-// Handler function untuk mengirim jawawaban
-const postAnswersHandler = (request, h) => {
-    const data = request.payload;
-    Object.assign(answers, data);
-    return { message: 'Jawaban berhasil diterima' };
-};
+const pool = require('./db');
 
 
-// Handler function untuk mendapatkan rating
-
-const getRatingHandler = (request, h) => {
-    const answeredQuestions = Object.values(answers);
-
-    if (answeredQuestions.length !== questions.length) {
-        return { error: 'Harap jawab semua pertanyaan terlebih dahulu.' };
+const getSurveyQuestionHandler = async (request, h) => {
+    try {
+      const [rows, fields] = await pool.execute('SELECT * FROM survey_questions');
+      const randomIndex = Math.floor(Math.random() * rows.length);
+      const randomQuestion = rows[randomIndex];
+  
+      return { question: randomQuestion.question };
+    } catch (error) {
+      console.error(error);
+      return h.response('Internal Server Error').code(500);
     }
-
-    const weightedSum = answeredQuestions.reduce((acc, answer, index) => acc + parseInt(ratingMap[answer]) * questions[index].weight, 0);
-    const rating = weightedSum / questions.length;
-
-
-    return { rating };
-};
+  };
+  
+  const postSurveyAnswerHandler = async (request, h) => {
+    const { questionId, answer } = request.payload;
+    try {
+      await pool.execute('INSERT INTO survey_answers (question_id, answer) VALUES (?, ?)', [questionId, answer]);
+  
+      return { success: true, message: 'Answer recorded successfully' };
+    } catch (error) {
+      console.error(error);
+      return h.response('Internal Server Error').code(500);
+    }
+  };
 
 
 ////////////////////////////// FITUR FORUM ////////////////////////////////////////
@@ -98,34 +93,9 @@ const postReplyHandler = (request, h) => {
 
 //////////////// FITUR DETEKSI SUASANA HATI ///////////////////////////
 
-// Handler function untuk route GET Question Mood 
-const getQuestionsMoodHandler = (request, h) => {
-    // Di sini Anda dapat mengembalikan daftar pertanyaan untuk mendeteksi suasana hati
-    const questions = ['Pertanyaan 1?', 'Pertanyaan 2?', 'Pertanyaan 3?'];
-    return { questions };
-};
 
-// Handler function untuk route POST Answer Mood
-const postAnswersMoodHandler = (request, h) => {
-    const { answers } = request.payload;
-
-    // Di sini Anda dapat melakukan analisis terhadap jawaban untuk mendeteksi suasana hati
-    const moodResult = 'Happy'; // Contoh sederhana, hasil deteksi suasana hati
-
-    // Simpan jawaban dan hasil deteksi mood ke riwayat
-    moodHistory.push({ answers, mood: moodResult });
-
-    return h.response({ message: 'Deteksi suasana hati berhasil' }).code(201);
-};
-
-// Handler function untuk route  GET History Mood
-const getHistoryMoodHandler = (request, h) => {
-    return { moodHistory };
-};
 
 module.exports = {
-    getQuestionsHandler, postAnswersHandler, getRatingHandler, getQuestionsMoodHandler,
+    getSurveyQuestionHandler, postSurveyAnswerHandler,
     postStoryHandler, getAllStoriesHandler, getRepliesHandler, postReplyHandler,
-    postAnswersMoodHandler,
-    getHistoryMoodHandler,
 };
