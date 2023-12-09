@@ -1,6 +1,6 @@
 const {
     getSurveyQuestionHandler,
-    postSurveyAnswerHandler,
+    postSaveAnswerHandler,
     postStoryHandler,
     getAllStoriesHandler,
     getRepliesHandler,
@@ -16,7 +16,7 @@ const routes = [
       {
         method: 'POST',
         path: '/survey/answer',
-        handler: postSurveyAnswerHandler,
+        handler: postSaveAnswerHandler,
       },
     // Mengirim Cerita/Thread
     {

@@ -1,24 +1,27 @@
 const Hapi = require('@hapi/hapi');
+const { connectToDatabase, closeDatabaseConnection, } = require('./db');
 const routes = require('./routes');
 
 const init = async () => {
-
-    // Initializing HTTP Server
     const server = Hapi.server({
         port: 9000,
         host: 'localhost',
-        routes: {
-            cors: {
-                origin: ['*'],
-            },
-        },
     });
 
+    // Menambahkan rute dari file routes.js
     server.route(routes);
 
-    // Running server
+    // Menyambung ke database sebelum server dimulai
+    await connectToDatabase();
+
     await server.start();
-    console.log(`Server berjalan pada ${server.info.uri}`);
-}
+    console.log(`Server running on ${server.info.uri}`);
+};
+
+process.on('SIGINT', async () => {
+    // Menutup koneksi database saat server dihentikan
+    await closeDatabaseConnection();
+    process.exit(0);
+});
 
 init();

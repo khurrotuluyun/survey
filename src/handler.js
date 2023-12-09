@@ -1,32 +1,34 @@
 //////////////////// FITUR RATE MENTAL HEALTH ////////////////////////
-const pool = require('./db');
-
+const { queryDatabase } = require('./db');
 
 const getSurveyQuestionHandler = async (request, h) => {
     try {
-      const [rows, fields] = await pool.execute('SELECT * FROM survey_questions');
-      const randomIndex = Math.floor(Math.random() * rows.length);
-      const randomQuestion = rows[randomIndex];
-  
-      return { question: randomQuestion.question };
-    } catch (error) {
-      console.error(error);
-      return h.response('Internal Server Error').code(500);
-    }
-  };
-  
-  const postSurveyAnswerHandler = async (request, h) => {
-    const { questionId, answer } = request.payload;
-    try {
-      await pool.execute('INSERT INTO survey_answers (question_id, answer) VALUES (?, ?)', [questionId, answer]);
-  
-      return { success: true, message: 'Answer recorded successfully' };
-    } catch (error) {
-      console.error(error);
-      return h.response('Internal Server Error').code(500);
-    }
-  };
+        const query = 'SELECT sq.id_question, sq.text_question, ao.id_options, ao.text_option FROM survey_questions sq JOIN answer_options ao ON sq.id_question = ao.id_question ORDER BY  sq.id_question, ao.id_options;'
 
+        const result = await queryDatabase(query);
+        return h.response(result).code(200);
+    } catch (error) {
+        console.error('Error getting questions:', error);
+        return h.response('Internal Server Error').code(500);
+    }
+};
+
+const postSaveAnswerHandler = async (request, h) => {
+    try {
+        const { id_question, id_options } = request.payload;
+
+        // Pastikan questionId dan optionId sesuai dengan nama kolom pada tabel
+        const query = `INSERT INTO user_answers (id_question, id_options) VALUES (${id_question}, ${id_options})`;
+
+        // Eksekusi query untuk menyimpan jawaban
+        await queryDatabase(query);
+
+        return h.response('Jawaban berhasil disimpan').code(200);
+    } catch (error) {
+        console.error('Error saving answer:', error);
+        return h.response('Internal Server Error').code(500);
+    }
+};
 
 ////////////////////////////// FITUR FORUM ////////////////////////////////////////
 
@@ -96,6 +98,6 @@ const postReplyHandler = (request, h) => {
 
 
 module.exports = {
-    getSurveyQuestionHandler, postSurveyAnswerHandler,
+    getSurveyQuestionHandler, postSaveAnswerHandler,
     postStoryHandler, getAllStoriesHandler, getRepliesHandler, postReplyHandler,
 };
