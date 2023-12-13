@@ -1,7 +1,8 @@
 // server.js
+require('dotenv').config(); // Load environment variables
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
-const db = require('./db'); // Import the database connection
+const db = require('./db');
 
 const init = async () => {
   const server = Hapi.server({
