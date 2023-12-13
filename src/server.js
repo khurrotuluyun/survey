@@ -1,27 +1,31 @@
+// server.js
 const Hapi = require('@hapi/hapi');
-const { connectToDatabase, closeDatabaseConnection, } = require('./db');
 const routes = require('./routes');
+const db = require('./db'); // Import the database connection
 
 const init = async () => {
-    const server = Hapi.server({
-        port: 9000,
-        host: 'localhost',
-    });
+  const server = Hapi.server({
+    port: 9000,
+    host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
+    routes: {
+      cors: {
+        origin: ['*'],
+      },
+    },
+  });
 
-    // Menambahkan rute dari file routes.js
-    server.route(routes);
+  // Attach the database connection to the server
+  server.app.db = db;
 
-    // Menyambung ke database sebelum server dimulai
-    await connectToDatabase();
+  server.route(routes);
 
-    await server.start();
-    console.log(`Server running on ${server.info.uri}`);
+  await server.start();
+  console.log('Server running on %s', server.info.uri);
 };
 
-process.on('SIGINT', async () => {
-    // Menutup koneksi database saat server dihentikan
-    await closeDatabaseConnection();
-    process.exit(0);
+process.on('unhandledRejection', (err) => {
+  console.error(err);
+  process.exit(1);
 });
 
 init();
