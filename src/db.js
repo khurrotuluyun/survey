@@ -1,11 +1,12 @@
 // db.js
 const mysql = require('mysql2/promise');
 
+
+// Replace the following database connection details with your actual database configuration
 const dbConfig = {
-  // Replace YOUR_INSTANCE_CONNECTION_NAME with your Google Cloud SQL instance connection name
-  host: '/cloudsql/final-project-ch2-ps034:asia-southeast2:survey',
+  host: 'localhost',
   user: 'root',
-  password: 'survey',
+  password: '',
   database: 'new',
 };
 
