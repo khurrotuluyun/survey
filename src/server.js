@@ -1,3 +1,4 @@
+
 // server.js
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
@@ -14,13 +15,21 @@ const init = async () => {
     },
   });
 
-  // Attach the database connection to the server
-  server.app.db = db;
+  try {
+    // Use the database connection from db.js
+    await db.connect(); // Assuming createConnection returns a promise
 
-  server.route(routes);
+    // Attach the database connection to the server
+    server.app.db = db;
 
-  await server.start();
-  console.log('Server running on %s', server.info.uri);
+    server.route(routes);
+
+    await server.start();
+    console.log('Server running on %s', server.info.uri);
+  } catch (err) {
+    console.error('Error connecting to the database:', err.message);
+    process.exit(1);
+  }
 };
 
 process.on('unhandledRejection', (err) => {
