@@ -1,15 +1,16 @@
+
+
 // db.js
 const mysql = require('mysql2/promise');
 
-
 // Replace the following database connection details with your actual database configuration
 const dbConfig = {
-  host: 'localhost',
+  host: '34.101.123.175',
   user: 'root',
-  password: '',
-  database: 'new',
+  password: 'survey',
+  database: 'survey',
 };
 
-const pool = mysql.createPool(dbConfig);
+const connection = mysql.createConnection(dbConfig);
 
-module.exports = pool;
+module.exports = connection;
