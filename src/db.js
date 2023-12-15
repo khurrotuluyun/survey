@@ -1,5 +1,3 @@
-
-
 // db.js
 const mysql = require('mysql2/promise');
 
@@ -8,9 +6,20 @@ const dbConfig = {
   host: '34.101.123.175',
   user: 'root',
   password: 'survey',
-  database: 'survey',
+  database: 'new',
 };
 
-const connection = mysql.createConnection(dbConfig);
+const pool = mysql.createPool(dbConfig);
 
-module.exports = connection;
+module.exports = {
+  execute: async (...args) => {
+    const conn = await pool.getConnection();
+    try {
+      return await conn.execute(...args);
+    } finally {
+      conn.release();
+    }
+  },
+  
+  // Add other methods or properties you may need here
+};

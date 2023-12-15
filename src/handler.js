@@ -1,9 +1,14 @@
 // handler.js
 const db = require('./db');
 
+const handlerrootHandler = (request, h) => {
+    console.log('Response success');
+    return 'Response Success!';
+  };
+
 const getSurveyQuestionHandler = async (request, h) => {
     try {
-        const [rows] = await db.execute('SELECT q.question_text, o.option_text FROM question_option qo INNER JOIN survey_question q ON qo.question_id = q.question_id INNER JOIN survey_option o ON qo.option_id = o.option_id');
+        const [rows] = await db.execute('SELECT q.question_text, o.option_text FROM question_option qo INNER JOIN survey_question q ON qo.question_id = q.question_id INNER JOIN survey_option o ON qo.option_id = o.option_id ORDER BY q.question_id, o.option_id');
         
         return h.response(rows).code(200);
       } catch (error) {
@@ -30,6 +35,6 @@ const postSaveAnswerHandler = async (request, h) => {
   
 
 module.exports = {
-  getSurveyQuestionHandler,
+    handlerrootHandler, getSurveyQuestionHandler,
   postSaveAnswerHandler,
 };
