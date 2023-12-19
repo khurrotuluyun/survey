@@ -1,4 +1,3 @@
-// handler.js
 const db = require('./db');
 
 const handlerrootHandler = (request, h) => {
