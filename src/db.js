@@ -3,10 +3,10 @@ const mysql = require('mysql2/promise');
 
 // Replace the following database connection details with your actual database configuration
 const dbConfig = {
-  host: '34.101.123.175',
+  host: '34.101.95.138',
   user: 'root',
-  password: 'survey',
-  database: 'new',
+  password: '12345678',
+  database: 'survey',
 };
 
 const pool = mysql.createPool(dbConfig);
